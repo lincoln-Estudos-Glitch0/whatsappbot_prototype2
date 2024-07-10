@@ -1,4 +1,5 @@
 import { Router } from "express"
+import { WebhookVerification } from "../components/classes/webhookVerificationClass.js"
 
 let controller = Router()
 
@@ -10,9 +11,14 @@ controller.post('/webhook', (req, res) => {
     res.sendStatus(200)
 })
 
-controller.get('/webhook', (req, res) => {
+controller.get('/webhook', async (req, res) => {
 
-    console.log(req.body)
+    if (await new WebhookVerification(req).verify()){
+        res.sendStatus(200).send(req.query['hub.challenge'])
+    }
+    else {
+        res.sendStatus(403)
+    }
 })
 
 export {controller as WebhookController }
