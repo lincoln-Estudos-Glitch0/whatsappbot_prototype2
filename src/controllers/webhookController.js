@@ -14,7 +14,7 @@ controller.post('/webhook', (req, res) => {
 controller.get('/webhook', async (req, res) => {
 
     if (await new WebhookVerification(req).verify()){
-        res.sendStatus(200).send(req.query['hub.challenge'])
+        res.status(200).send(req.query['hub.challenge'])
     }
     else {
         res.sendStatus(403)
